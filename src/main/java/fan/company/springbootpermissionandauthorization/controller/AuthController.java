@@ -1,0 +1,37 @@
+package fan.company.springbootpermissionandauthorization.controller;
+
+import fan.company.springbootpermissionandauthorization.payload.ApiResult;
+import fan.company.springbootpermissionandauthorization.payload.LoginDto;
+import fan.company.springbootpermissionandauthorization.payload.RegisterDto;
+import fan.company.springbootpermissionandauthorization.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+
+    @Autowired
+    AuthService service;
+
+    @PostMapping("/register")
+    public HttpEntity<?> register(@Valid @RequestBody RegisterDto dto){
+        ApiResult apiResult = service.register(dto);
+        return ResponseEntity.status(apiResult.isSuccess()? HttpStatus.CREATED:HttpStatus.CONFLICT).body(apiResult);
+    }
+
+    @PostMapping("/login")
+    public HttpEntity<?> register(@Valid @RequestBody LoginDto dto){
+        ApiResult apiResult = service.login(dto);
+        return ResponseEntity.status(apiResult.isSuccess()? HttpStatus.CREATED:HttpStatus.CONFLICT).body(apiResult);
+    }
+
+}
